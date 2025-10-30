@@ -27,15 +27,15 @@ if ($_SERVER['REQUEST_METHOD']==='POST') {
 ?>
 <!DOCTYPE html>
 <html>
-<head><meta charset="utf-8"><title> item aldatu</title><script src="/js/validation.js"></script></head>
+<head><meta charset="utf-8"><title> Diska aldatu</title><script src="/js/validation.js"></script></head>
 <body>
-  <h2> item aldatu</h2>
+  <h2> Diska aldatu</h2>
   <?php if ($errors) foreach($errors as $e) echo "<p style='color:red'>".htmlspecialchars($e)."</p>"; ?>
   <form id="item_modify_form" method="post" action="" onsubmit="return validateItemForm();">
     <label>Izenburua: <input name="title" value="<?=htmlspecialchars($title)?>" required></label><br>
     <label>Urtea: <input name="year" type="number" value="<?=htmlspecialchars($year)?>" required></label><br>
     <label>Artista: <input name="artist" value="<?=htmlspecialchars($artist)?>" required></label><br>
-    <label>Género: <input name="genre" value="<?=htmlspecialchars($genre)?>"></label><br>
+    <label>Generoa: <input name="genre" value="<?=htmlspecialchars($genre)?>"></label><br>
     <label>Deskripzioa: <textarea name="description"><?=htmlspecialchars($description)?></textarea></label><br>
     <button id="item_modify_submit" type="submit">Gorde</button>
   </form>

@@ -3,12 +3,12 @@
 require_once __DIR__.'/db.php';
 $id = intval($_GET['item'] ?? 0);
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Confirmación recibida
+    // Balioztatua emanda
     if (isset($_POST['confirm']) && $_POST['confirm'] === 'yes') {
         $del = $mysqli->prepare("DELETE FROM items WHERE id=?");
         $del->bind_param('i',$id);
         if ($del->execute()) header('Location: /items');
-        else $error = 'Error al borrar: '.$mysqli->error;
+        else $error = 'Errorea borratzean: '.$mysqli->error;
     } else {
         header('Location: /items');
     }

@@ -20,7 +20,7 @@ if ($_SERVER['REQUEST_METHOD']==='POST') {
     if (empty($errors)) {
         $upd = $mysqli->prepare("UPDATE items SET title=?,year=?,artist=?,genre=?,description=? WHERE id=?");
         $upd->bind_param('sisssi', $title_n,$year_n,$artist_n,$genre_n,$desc_n,$id);
-        if ($upd->execute()) header('Location: /src/items.php');
+        if ($upd->execute()) header('Location: /items');
         else $errors[]='Error: '.$mysqli->error;
     }
 }

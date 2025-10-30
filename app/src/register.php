@@ -11,7 +11,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $fullname = trim($_POST['fullname'] ?? '');
     $dni = strtoupper(trim($_POST['dni'] ?? ''));
     $phone = trim($_POST['phone'] ?? '');
-    $birthdate = trim($_POST['birthdate'] ?? '');
+    $birthdate_input = trim($_POST['birthdate'] ?? '');
     $email = trim($_POST['email'] ?? '');
     $username = trim($_POST['username'] ?? '');
     $password = $_POST['password'] ?? '';
@@ -20,19 +20,46 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!preg_match('/^[A-Za-zÑñÁÉÍÓÚáéíóúü\\s]+$/u', $fullname)) $errors[] = 'Nombre y apellidos sólo texto.';
     if (!preg_match('/^[0-9]{8}-[A-Z]$/', $dni) || !check_nif($dni)) $errors[] = 'NAN inválido.';
     if (!preg_match('/^[0-9]{9}$/', $phone)) $errors[] = 'Teléfono inválido.';
-    if (!preg_match('/^\d{4}-\d{2}-\d{2}$/', $birthdate)) $errors[] = 'Fecha inválida. Formato uuuu-mm-dd.';
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) $errors[] = 'Email inválido.';
     if (strlen($username) < 3) $errors[] = 'Usuario demasiado corto.';
     if (strlen($password) < 6) $errors[] = 'Password demasiado corta.';
 
-    if (empty($errors)) {
-        $stmt = $mysqli->prepare("INSERT INTO users (fullname, dni, phone, birthdate, email, username, password) VALUES (?,?,?,?,?,?,SHA2(?,256))");
-        $stmt->bind_param('sssssss', $fullname, $dni, $phone, $birthdate, $email, $username, $password);
-        if ($stmt->execute()) {
-            header('Location: /src/login.php');
-            exit;
+    // Fecha: validar y normalizar a YYYY-MM-DD usando DateTime (acepta YYYY-MM-DD y DD-MM-YYYY)
+    $birthdate = null;
+    if ($birthdate_input !== '') {
+        // Intentar parsear con DateTime en formatos aceptados
+        $d = DateTime::createFromFormat('Y-m-d', $birthdate_input);
+        $errors_dt = DateTime::getLastErrors();
+        if ($d && $errors_dt['warning_count'] === 0 && $errors_dt['error_count'] === 0) {
+            $birthdate = $d->format('Y-m-d');
         } else {
-            $errors[] = 'Error al registrar: '.$mysqli->error;
+            // Intentar formato alternativo dd-mm-YYYY
+            $d2 = DateTime::createFromFormat('d-m-Y', $birthdate_input);
+            $errors_dt2 = DateTime::getLastErrors();
+            if ($d2 && $errors_dt2['warning_count'] === 0 && $errors_dt2['error_count'] === 0) {
+                $birthdate = $d2->format('Y-m-d');
+            } else {
+                $errors[] = 'Fecha inválida. Usa el formato aaaa-mm-dd o dd-mm-aaaa.';
+            }
+        }
+    } else {
+        $errors[] = 'Fecha de nacimiento requerida.';
+    }
+
+    if (empty($errors)) {
+        try {
+            $stmt = $mysqli->prepare("INSERT INTO users (fullname, dni, phone, birthdate, email, username, password) VALUES (?,?,?,?,?,?,SHA2(?,256))");
+            if (!$stmt) throw new Exception('Error prepare: '.$mysqli->error);
+            $stmt->bind_param('sssssss', $fullname, $dni, $phone, $birthdate, $email, $username, $password);
+            if ($stmt->execute()) {
+                // Redirigir a la ruta limpia /login
+                header('Location: /login');
+                exit;
+            } else {
+                $errors[] = 'Error al registrar: '.$stmt->error;
+            }
+        } catch (Exception $e) {
+            $errors[] = 'Excepción al insertar: '.$e->getMessage();
         }
     }
 }
@@ -65,7 +92,7 @@ function check_nif($dni) {
     <label>Nombre y apellidos: <input name="fullname" required></label><br>
     <label>NAN (11111111-Z): <input name="dni" required></label><br>
     <label>Teléfono: <input name="phone" required></label><br>
-    <label>Fecha nacimiento (aaaa-mm-dd): <input name="birthdate" required></label><br>
+    <label>Fecha nacimiento (aaaa-mm-dd o dd-mm-aaaa): <input name="birthdate" required placeholder="aaaa-mm-dd"></label><br>
     <label>Email: <input name="email" required></label><br>
     <label>Usuario: <input name="username" required></label><br>
     <label>Password: <input type="password" name="password" required></label><br>

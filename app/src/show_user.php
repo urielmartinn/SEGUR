@@ -24,7 +24,7 @@ $found = $stmt->fetch();
     <p>Email: <?=htmlspecialchars($email)?></p>
     <p>Usuario: <?=htmlspecialchars($username)?></p>
     <?php if (isset($_SESSION['username']) && $_SESSION['username']===$username): ?>
-      <a href="/src/modify_user.php?user=<?=urlencode($username)?>">Modificar mis datos</a>
+      <a href="/modify_user?user=<?=urlencode($username)?>">Modificar mis datos</a>
     <?php endif; ?>
   <?php endif; ?>
 </body>

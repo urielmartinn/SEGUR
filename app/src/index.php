@@ -1,5 +1,6 @@
 <?php
 // Home: localhost:81/
+// Actualizado para usar rutas "limpias" (/register, /login, /items, /add_item)
 session_start();
 ?>
 <!DOCTYPE html>
@@ -12,17 +13,17 @@ session_start();
 <body>
   <h1>Web Sistema - Home</h1>
   <?php if (isset($_SESSION['username'])): ?>
-    <p>Bienvenido, <?=htmlspecialchars($_SESSION['username'])?> | <a href="/src/logout.php">Salir</a></p>
+    <p>Bienvenido, <?=htmlspecialchars($_SESSION['username'])?> | <a href="/logout">Salir</a></p>
     <nav>
-      <a href="/src/show_user.php?user=<?=urlencode($_SESSION['username'])?>">Mi perfil</a> |
-      <a href="/src/items.php">Items</a> |
-      <a href="/src/add_item.php">Añadir Item</a>
+      <a href="/show_user?user=<?=urlencode($_SESSION['username'])?>">Mi perfil</a> |
+      <a href="/items">Items</a> |
+      <a href="/add_item">Añadir Item</a>
     </nav>
   <?php else: ?>
     <nav>
-      <a href="/src/register.php">Registro</a> |
-      <a href="/src/login.php">Login</a> |
-      <a href="/src/items.php">Items (no identificado)</a>
+      <a href="/register.php">Registro</a> |
+      <a href="/login.php">Login</a> |
+      <a href="/items.php">Items (no identificado)</a>
     </nav>
   <?php endif; ?>
 </body>

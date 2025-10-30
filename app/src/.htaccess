@@ -1,0 +1,21 @@
+RewriteEngine On
+RewriteBase /
+
+# Home
+RewriteRule ^$ /index.php [L]
+
+# Rutas limpias mapeadas a los PHP que están en /var/www/html
+RewriteRule ^register$ /register.php [L,QSA]
+RewriteRule ^login$ /login.php [L,QSA]
+RewriteRule ^show_user$ /show_user.php [L,QSA]
+RewriteRule ^modify_user$ /modify_user.php [L,QSA]
+RewriteRule ^items$ /items.php [L,QSA]
+RewriteRule ^add_item$ /add_item.php [L,QSA]
+RewriteRule ^show_item$ /show_item.php [L,QSA]
+RewriteRule ^modify_item$ /modify_item.php [L,QSA]
+RewriteRule ^delete_item$ /delete_item.php [L,QSA]
+
+# Si existe fichero o carpeta, servirlo directamente
+RewriteCond %{REQUEST_FILENAME} -f [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^ - [L]

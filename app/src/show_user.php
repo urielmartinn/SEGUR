@@ -1,5 +1,5 @@
 <?php
-// Mostrar usuario: localhost:81/show_user?user={x}
+// Erabiltzailea erakutsi: localhost:81/show_user?user={x}
 session_start();
 require_once __DIR__.'/db.php';
 $user = $_GET['user'] ?? '';
@@ -11,20 +11,20 @@ $found = $stmt->fetch();
 ?>
 <!DOCTYPE html>
 <html>
-<head><meta charset="utf-8"><title>Mostrar usuario</title></head>
+<head><meta charset="utf-8"><title>Erabiltzailea erakutsi</title></head>
 <body>
-  <h2>Mostrar usuario</h2>
+  <h2>Erabiltzailea erakutsi</h2>
   <?php if (!$found): ?>
-    <p>Usuario no encontrado.</p>
+    <p>Erabiltzailea ez da aurkitu</p>
   <?php else: ?>
-    <p>Nombre: <?=htmlspecialchars($fullname)?></p>
+    <p>Izena: <?=htmlspecialchars($fullname)?></p>
     <p>NAN: <?=htmlspecialchars($dni)?></p>
-    <p>Teléfono: <?=htmlspecialchars($phone)?></p>
-    <p>Fecha nacimiento: <?=htmlspecialchars($birthdate)?></p>
-    <p>Email: <?=htmlspecialchars($email)?></p>
-    <p>Usuario: <?=htmlspecialchars($username)?></p>
+    <p>Telefonoa: <?=htmlspecialchars($phone)?></p>
+    <p>Jaiotze data: <?=htmlspecialchars($birthdate)?></p>
+    <p>Emaila: <?=htmlspecialchars($email)?></p>
+    <p>Erabiltzailea: <?=htmlspecialchars($username)?></p>
     <?php if (isset($_SESSION['username']) && $_SESSION['username']===$username): ?>
-      <a href="/modify_user?user=<?=urlencode($username)?>">Modificar mis datos</a>
+      <a href="/modify_user?user=<?=urlencode($username)?>">Nire datuak aldatu</a>
     <?php endif; ?>
   <?php endif; ?>
 </body>

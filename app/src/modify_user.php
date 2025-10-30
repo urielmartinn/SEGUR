@@ -7,7 +7,7 @@ require_once __DIR__.'/db.php';
 
 if (!isset($_GET['user'])) {
     http_response_code(400);
-    die('Usuario no especificado.');
+    die('Usuario ez espezifikatua.');
 }
 
 $user = $_GET['user'];
@@ -115,7 +115,7 @@ function check_nif($dni) {
     <label>Teléfono: <input name="phone" value="<?=htmlspecialchars($phone)?>" required></label><br>
     <label>Jaoitze data (aaaa-mm-dd o dd-mm-aaaa): <input name="birthdate" value="<?=htmlspecialchars($birthdate)?>" required placeholder="aaaa-mm-dd"></label><br>
     <label>Email: <input name="email" value="<?=htmlspecialchars($email)?>" required></label><br>
-    <button id="user_modify_submit" type="submit">Guardar</button>
+    <button id="user_modify_submit" type="submit">Gorde</button>
   </form>
 </body>
 </html>

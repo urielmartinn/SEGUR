@@ -11,7 +11,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $desc = trim($_POST['description'] ?? '');
 
     if ($title === '') {
-        $errors[] = 'Título requerido.';
+        $errors[] = 'Izenburua behar.';
     }
     if ($year < 0 || $year > intval(date('Y')) + 1) {
         $errors[] = 'Urtea txarto';
@@ -41,11 +41,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <html>
 <head>
   <meta charset="utf-8">
-  <title>Añadir item</title>
+  <title>Gehitu item</title>
   <script src="/js/validation.js"></script>
 </head>
 <body>
-  <h2>Añadir item</h2>
+  <h2>Gehitu item</h2>
 
   <?php
   if (!empty($errors)) {

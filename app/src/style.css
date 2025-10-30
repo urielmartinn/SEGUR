@@ -1,0 +1,5 @@
+/* Estilos básicos: aporta diseño (1 punto) */
+/* Comentarios: modifica a gusto, respeta licencias si usas templates externos */
+body { font-family: Arial, sans-serif; margin: 20px; }
+h1,h2 { color: #333; }
+nav a { margin-right: 10px; }

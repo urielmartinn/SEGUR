@@ -17,7 +17,7 @@ Baldintzak
    cd NOMBRE-REPO
 
 2. Entregaren adarrera aldatzeko:
-   git checkout entrega_1
+   git checkout zeregina_1
 
 3. Sortu eta abiarazi
    docker-compose up --build -d

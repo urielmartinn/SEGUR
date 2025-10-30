@@ -13,8 +13,8 @@ Baldintzak
 
 
 1. Rpositorioa klonatu
-   git clone https://github.com/TUUSUARIO/NOMBRE-REPO.git
-   cd NOMBRE-REPO
+   git clone https://github.com/urielmartinn/SEGUR.git
+   cd REPO_IZENA
 
 2. Entregaren adarrera aldatzeko:
    git checkout zeregina_1

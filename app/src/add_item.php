@@ -1,6 +1,3 @@
-
-
-
 <?php
 // Gehitu: localhost: 81/add_item
 // id formularioa: item_add_form

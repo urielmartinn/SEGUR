@@ -1,5 +1,5 @@
 <?php
-// aldakera item: localhost:81/modify_item?item={x}
+// aldaketa item: localhost:81/modify_item?item={x}
 // id formularioa: item_modify_form
 // id botoia: item_modify_submit
 require_once __DIR__.'/db.php';
@@ -37,7 +37,7 @@ if ($_SERVER['REQUEST_METHOD']==='POST') {
     <label>Artista: <input name="artist" value="<?=htmlspecialchars($artist)?>" required></label><br>
     <label>Género: <input name="genre" value="<?=htmlspecialchars($genre)?>"></label><br>
     <label>Deskripzioa: <textarea name="description"><?=htmlspecialchars($description)?></textarea></label><br>
-    <button id="item_modify_submit" type="submit">Guardar</button>
+    <button id="item_modify_submit" type="submit">Gorde</button>
   </form>
 </body>
 </html>

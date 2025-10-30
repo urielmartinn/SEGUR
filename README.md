@@ -7,7 +7,7 @@ Informazio Sistemen Segurtasuna Kudeatzeko Sistemak irakasgairako garatutako
 Web Sistema proiektua. Repo honek Dockerrekin zabaltzeko aplikazioa eta 
 jarraibideak ditu.
 
-Baldintzak
+Aurrebaldintzak
 - Docker
 - Docker Compose
 
@@ -24,13 +24,6 @@ Baldintzak
 
 5. Nabigatzailetik sartzeko:
    http://localhost:81/
-
-Rpositorioaren edukia: 
-- docker-compose.yml: orquesta apache/php eta mariadb.
-- Dockerfile:
-- www/: PHP/HTML/JS/CSS kodea.
-- schema.sql: datu basea eta bere taulak sortzeko script-a
-- USO.pdf: jarraibideak 
 
 Harremanetan jartzeko:
 - umartin025@ikasle.ehu.eus

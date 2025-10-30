@@ -41,11 +41,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <html>
 <head>
   <meta charset="utf-8">
-  <title>Gehitu item</title>
+  <title>Gehitu Diska</title>
   <script src="/js/validation.js"></script>
 </head>
 <body>
-  <h2>Gehitu item</h2>
+  <h2>Gehitu Diska</h2>
 
   <?php
   if (!empty($errors)) {
@@ -61,7 +61,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <label>Izenburua: <input name="title" required value="<?= isset($title) ? htmlspecialchars($title) : '' ?>"></label><br>
     <label>Urtea: <input name="year" type="number" required value="<?= isset($year) ? htmlspecialchars($year) : '' ?>"></label><br>
     <label>Abezlaria: <input name="artist" required value="<?= isset($artist) ? htmlspecialchars($artist) : '' ?>"></label><br>
-    <label>Genero: <input name="genre" value="<?= isset($genre) ? htmlspecialchars($genre) : '' ?>"></label><br>
+    <label>Generoa: <input name="genre" value="<?= isset($genre) ? htmlspecialchars($genre) : '' ?>"></label><br>
     <label>Deskribapena: <textarea name="description"><?= isset($desc) ? htmlspecialchars($desc) : '' ?></textarea></label><br>
     <button id="item_add_submit" type="submit">Gorde</button>
   </form>

@@ -1,18 +1,16 @@
-// Validaciones cliente para formularios (obligatorio)
-// Comentarios: funciones referenciadas en los formularios
 function validateRegisterForm(){
-  // Lectura rápida de campos
+
   const form = document.getElementById('register_form');
   const fullname = form.elements['fullname'].value.trim();
   const dni = form.elements['dni'].value.trim().toUpperCase();
   const phone = form.elements['phone'].value.trim();
   const birthdate = form.elements['birthdate'].value.trim();
   const email = form.elements['email'].value.trim();
-  if (!/^[A-Za-zÑñÁÉÍÓÚáéíóúü\s]+$/.test(fullname)){ alert('Nombre no válido'); return false; }
-  if (!/^[0-9]{8}-[A-Z]$/.test(dni) || !checkNif(dni)){ alert('NAN inválido'); return false; }
-  if (!/^[0-9]{9}$/.test(phone)){ alert('Teléfono inválido'); return false; }
-  if (!/^\d{4}-\d{2}-\d{2}$/.test(birthdate)){ alert('Fecha inválida'); return false; }
-  if (!/^[^@]+@[^@]+\.[^@]+$/.test(email)){ alert('Email inválido'); return false; }
+  if (!/^[A-Za-zÑñÁÉÍÓÚáéíóúü\s]+$/.test(fullname)){ alert('Izena txarto'); return false; }
+  if (!/^[0-9]{8}-[A-Z]$/.test(dni) || !checkNif(dni)){ alert('NAN txarto'); return false; }
+  if (!/^[0-9]{9}$/.test(phone)){ alert('Telefonoa txarto'); return false; }
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(birthdate)){ alert('Data txarto'); return false; }
+  if (!/^[^@]+@[^@]+\.[^@]+$/.test(email)){ alert('Email txarto'); return false; }
   return true;
 }
 function validateItemForm(){
@@ -21,9 +19,9 @@ function validateItemForm(){
   const title = form.elements['title'].value.trim();
   const year = parseInt(form.elements['year'].value,10);
   const artist = form.elements['artist'].value.trim();
-  if (title.length===0){ alert('Título requerido'); return false; }
-  if (isNaN(year) || year<0 || year> (new Date()).getFullYear()+1){ alert('Año inválido'); return false; }
-  if (artist.length===0){ alert('Artista requerido'); return false; }
+  if (title.length===0){ alert('Izenburua txarto'); return false; }
+  if (isNaN(year) || year<0 || year> (new Date()).getFullYear()+1){ alert('Urtea txarto'); return false; }
+  if (artist.length===0){ alert('Abezlea behar da'); return false; }
   return true;
 }
 function checkNif(dni){

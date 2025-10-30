@@ -10,10 +10,10 @@ $found = $stmt->fetch();
 ?>
 <!DOCTYPE html>
 <html>
-<head><meta charset="utf-8"><title> Itema erakutsi </title></head>
+<head><meta charset="utf-8"><title> Diska erakutsi </title></head>
 <body>
   <?php if (!$found): ?>
-    <p>Item ez da aurkitu</p>
+    <p>Diska ez da aurkitu</p>
   <?php else: ?>
     <h2><?=htmlspecialchars($title)?></h2>
     <p>Urtea: <?=htmlspecialchars($year)?></p>

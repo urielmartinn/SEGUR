@@ -1,5 +1,5 @@
 <?php
-// Mostrar item: localhost:81/show_item?item={x}
+// Erakutsi diskak: localhost:81/show_item?item={x}
 require_once __DIR__.'/db.php';
 $id = intval($_GET['item'] ?? 0);
 $stmt = $mysqli->prepare("SELECT title,year,artist,genre,description FROM items WHERE id=?");
@@ -10,17 +10,17 @@ $found = $stmt->fetch();
 ?>
 <!DOCTYPE html>
 <html>
-<head><meta charset="utf-8"><title>Mostrar item</title></head>
+<head><meta charset="utf-8"><title>Erakutsi diskak</title></head>
 <body>
   <?php if (!$found): ?>
-    <p>Item no encontrado.</p>
+    <p>Diska ez da aurkitu</p>
   <?php else: ?>
     <h2><?=htmlspecialchars($title)?></h2>
-    <p>Año: <?=htmlspecialchars($year)?></p>
+    <p>Urtea: <?=htmlspecialchars($year)?></p>
     <p>Artista: <?=htmlspecialchars($artist)?></p>
-    <p>Género: <?=htmlspecialchars($genre)?></p>
-    <p>Descripción: <?=nl2br(htmlspecialchars($description))?></p>
-    <p><a href="/items">Volver al listado</a></p>
+    <p>Generoa: <?=htmlspecialchars($genre)?></p>
+    <p>Deskripzioa: <?=nl2br(htmlspecialchars($description))?></p>
+    <p><a href="/items">Listaketara itzuli</a></p>
   <?php endif; ?>
 </body>
 </html>

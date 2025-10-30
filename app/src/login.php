@@ -1,7 +1,7 @@
 <?php
 // Login: localhost:81/login
-// id formulario: login_form
-// id boton: login_submit
+// id formularioa: login_form
+// id botoia: login_submit
 session_start();
 require_once __DIR__.'/db.php';
 $error = '';
@@ -13,13 +13,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $stmt->execute();
     $stmt->bind_result($u, $hash);
     if ($stmt->fetch()) {
-        // Comparar SHA2
+        // Konparatu SHA2
         if (hash('sha256', $password) === $hash) {
             $_SESSION['username'] = $u;
             header('Location: /');
             exit;
-        } else $error = 'Credenciales inválidas.';
-    } else $error = 'Usuario no encontrado.';
+        } else $error = 'Kredentzialak ez dira baliozkoak .';
+    } else $error = 'Erabiltzailea ez da aurkitu.';
 }
 ?>
 <!DOCTYPE html>
@@ -32,9 +32,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   <h2>Login</h2>
   <?php if ($error) echo '<p style="color:red">'.$error.'</p>'; ?>
   <form id="login_form" method="post" action="">
-    <label>Usuario: <input name="username" required></label><br>
+    <label>Erabiltzailea: <input name="username" required></label><br>
     <label>Password: <input type="password" name="password" required></label><br>
-    <button id="login_submit" type="submit">Entrar</button>
+    <button id="login_submit" type="submit">Sartu</button>
   </form>
 </body>
 </html>

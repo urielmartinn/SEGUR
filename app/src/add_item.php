@@ -18,7 +18,7 @@ if ($_SERVER['REQUEST_METHOD']==='POST') {
     if (empty($errors)) {
         $stmt = $mysqli->prepare("INSERT INTO items (title,year,artist,genre,description) VALUES (?,?,?,?,?)");
         $stmt->bind_param('sisss', $title, $year, $artist, $genre, $desc);
-        if ($stmt->execute()) header('Location: /src/items.php');
+        if ($stmt->execute()) header('Location: /items');
         else $errors[] = 'Error: '.$mysqli->error;
     }
 }

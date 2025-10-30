@@ -20,6 +20,7 @@ $found = $stmt->fetch();
     <p>Artista: <?=htmlspecialchars($artist)?></p>
     <p>Género: <?=htmlspecialchars($genre)?></p>
     <p>Descripción: <?=nl2br(htmlspecialchars($description))?></p>
+    <p><a href="/items">Volver al listado</a></p>
   <?php endif; ?>
 </body>
 </html>

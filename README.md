@@ -16,7 +16,8 @@ Aurrebaldintzak
    git clone https://github.com/urielmartinn/SEGUR.git
    cd REPO_IZENA
 
-3. Entregaren adarrera aldatzeko:
+2. Entregaren adarrera aldatzeko:
+
    git checkout zeregina_1
 
 4. Sortu eta abiarazi

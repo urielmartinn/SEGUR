@@ -8,10 +8,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['confirm']) && $_POST['confirm'] === 'yes') {
         $del = $mysqli->prepare("DELETE FROM items WHERE id=?");
         $del->bind_param('i',$id);
-        if ($del->execute()) header('Location: /src/items.php');
+        if ($del->execute()) header('Location: /items');
         else $error = 'Error al borrar: '.$mysqli->error;
     } else {
-        header('Location: /src/items.php');
+        header('Location: /items');
     }
 }
 $stmt = $mysqli->prepare("SELECT title FROM items WHERE id=?");

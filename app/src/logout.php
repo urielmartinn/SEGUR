@@ -1,5 +1,5 @@
 <?php
-// logout: limpia sesión y redirige a /
+// logout: Sesioa garbitu berbideratu a /
 session_start();
 $_SESSION = [];
 if (ini_get("session.use_cookies")) {

@@ -1,6 +1,6 @@
 <?php
 // Home: localhost:81/
-// Actualizado para usar rutas "limpias" (/register, /login, /items, /add_item)
+// Eguneratua ibilbide "garbiak" erabiltzeko (/register, /login, /items, /add_item)
 session_start();
 ?>
 <!DOCTYPE html>
@@ -13,17 +13,17 @@ session_start();
 <body>
   <h1>Web Sistema - Home</h1>
   <?php if (isset($_SESSION['username'])): ?>
-    <p>Bienvenido, <?=htmlspecialchars($_SESSION['username'])?> | <a href="/logout">Salir</a></p>
+    <p>Bienvenido, <?=htmlspecialchars($_SESSION['username'])?> | <a href="/logout">Atera</a></p>
     <nav>
-      <a href="/show_user?user=<?=urlencode($_SESSION['username'])?>">Mi perfil</a> |
-      <a href="/items">Items</a> |
-      <a href="/add_item">Añadir Item</a>
+      <a href="/show_user?user=<?=urlencode($_SESSION['username'])?>">Nire profila</a> |
+      <a href="/items">Diskak</a> |
+      <a href="/add_item">Gehitu Diska</a>
     </nav>
   <?php else: ?>
     <nav>
-      <a href="/register.php">Registro</a> |
+      <a href="/register.php">Erregistroa</a> |
       <a href="/login.php">Login</a> |
-      <a href="/items.php">Items (no identificado)</a>
+      <a href="/items.php">Diskak </a>
     </nav>
   <?php endif; ?>
 </body>

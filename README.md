@@ -12,17 +12,17 @@ Baldintzak
 - Docker Compose
 
 
-1. Rpositorioa klonatu
+1. Repositorioa klonatu
    git clone https://github.com/urielmartinn/SEGUR.git
    cd REPO_IZENA
 
-2. Entregaren adarrera aldatzeko:
+3. Entregaren adarrera aldatzeko:
    git checkout zeregina_1
 
-3. Sortu eta abiarazi
+4. Sortu eta abiarazi
    docker-compose up --build -d
 
-4. Nabigatzailetik sartzeko:
+5. Nabigatzailetik sartzeko:
    http://localhost:81/
 
 Rpositorioaren edukia: 

@@ -8,14 +8,15 @@ $error = '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $username = $_POST['username'] ?? '';
     $password = $_POST['password'] ?? '';
-    $stmt = $mysqli->prepare("SELECT username, password FROM users WHERE username=?");
+    $stmt = $mysqli->prepare("SELECT username, password, is_admin FROM users WHERE username=?");
     $stmt->bind_param('s',$username);
     $stmt->execute();
-    $stmt->bind_result($u, $hash);
+    $stmt->bind_result($u, $hash, $is_admin);
     if ($stmt->fetch()) {
         // Konparatu SHA2
         if (hash('sha256', $password) === $hash) {
             $_SESSION['username'] = $u;
+            $_SESSION['is_admin'] = (int)$is_admin;
             header('Location: /');
             exit;
         } else $error = 'Kredentzialak ez dute balio.';
@@ -35,6 +36,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <label>Erabiltzaile: <input name="username" required></label><br>
     <label>Password: <input type="password" name="password" required></label><br>
     <button id="login_submit" type="submit">Sartu</button>
+    <a href="/" class="back-btn">Hasierara bueltatu</a>
+
   </form>
 </body>
 </html>

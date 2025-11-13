@@ -2,7 +2,14 @@
 // Gehitu: localhost: 81/add_item
 // id formularioa: item_add_form
 // id boton: item_add_submit 
+session_start();
 require_once __DIR__.'/db.php';
+
+
+if (!isset($_SESSION['is_admin']) || $_SESSION['is_admin'] != 1) {
+    http_response_code(403);
+    die('Forbidden: acceso denegado.');
+}
 
 $errors = [];
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -49,6 +56,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <body>
   <h2>Diska gehitu</h2>
 
+
   <?php
   if (!empty($errors)) {
       echo '<ul style="color:red;">';
@@ -59,13 +67,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   }
   ?>
 
-  <form id="item_add_form" method="post" action="">
+    <form id="item_add_form" method="post" action="">
     <label>Izenburua: <input name="title" required value="<?= isset($title) ? htmlspecialchars($title) : '' ?>"></label><br>
     <label>Urtea: <input name="year" type="number" required value="<?= isset($year) ? htmlspecialchars($year) : '' ?>"></label><br>
     <label>Artista: <input name="artist" required value="<?= isset($artist) ? htmlspecialchars($artist) : '' ?>"></label><br>
     <label>Generoa: <input name="genre" value="<?= isset($genre) ? htmlspecialchars($genre) : '' ?>"></label><br>
     <label>Deskripzioa: <textarea name="description"><?= isset($desc) ? htmlspecialchars($desc) : '' ?></textarea></label><br>
     <button id="item_add_submit" type="submit">Gehitu</button>
+    <a href="/" class="back-btn">Hasierara bueltatu</a>
+
   </form>
 </body>
 </html>

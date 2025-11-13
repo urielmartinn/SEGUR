@@ -28,4 +28,9 @@ VALUES ('Juan Perez', '11111111-T', '600123456', '1990-05-10', 'juan@example.com
 
 INSERT INTO items (title, year, artist, genre, description) VALUES
 ('Disco A', 1977, 'Artista X', 'Rock', 'Disco clásico.'),
-('Disco B', 1982, 'Artista Y', 'Pop', 'Edición limitada.');
+('Disco B', 1982, 'Artista Y', 'Pop', 'Edición limitada.'); 
+
+
+ALTER TABLE users ADD COLUMN is_admin TINYINT(1) NOT NULL DEFAULT 0;
+-- 
+UPDATE users SET is_admin = 1 WHERE username = 'juan';

@@ -41,7 +41,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email_new = trim($_POST['email'] ?? '');
 
     // Oinarrizko eremuak berriz baliozkotzea
-    if (!preg_match('/^[A-Za-zÑñÁÉÍÓÚáéíóúü\\s]+$/u', $fullname_new)) $errors[] = 'Izen okerra.';
+    // CORRECCIÓN: usar \p{L} en lugar de escapes \u
+    if (!preg_match('/^[\p{L}\s]+$/u', $fullname_new)) $errors[] = 'Izen okerra.';
     if (!preg_match('/^[0-9]{8}-[A-Z]$/', $dni_new) || !check_nif($dni_new)) $errors[] = 'NAN okerra.';
     if (!preg_match('/^[0-9]{9}$/', $phone_new)) $errors[] = 'Teléfono okerra.';
     if (!filter_var($email_new, FILTER_VALIDATE_EMAIL)) $errors[] = 'Email okerra.';
@@ -113,7 +114,7 @@ function check_nif($dni) {
     <label>Izen eta abizenak: <input name="fullname" value="<?=htmlspecialchars($fullname)?>" required></label><br>
     <label>NAN (11111111-Z): <input name="dni" value="<?=htmlspecialchars($dni)?>" required></label><br>
     <label>Teléfono: <input name="phone" value="<?=htmlspecialchars($phone)?>" required></label><br>
-    <label>Jaoitze data (aaaa-mm-dd o dd-mm-aaaa): <input name="birthdate" value="<?=htmlspecialchars($birthdate)?>" required placeholder="aaaa-mm-dd"></label><br>
+    <label>Jaiitze data (aaaa-mm-dd o dd-mm-aaaa): <input name="birthdate" value="<?=htmlspecialchars($birthdate)?>" required placeholder="aaaa-mm-dd"></label><br>
     <label>Email: <input name="email" value="<?=htmlspecialchars($email)?>" required></label><br>
     <button id="user_modify_submit" type="submit">Gorde</button>
   </form>

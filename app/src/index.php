@@ -15,8 +15,10 @@ session_start();
     <p>Ongi etorri, <?=htmlspecialchars($_SESSION['username'])?> | <a href="/logout">Atera</a></p>
     <nav>
       <a href="/show_user?user=<?=urlencode($_SESSION['username'])?>">Nire profila</a> |
-      <a href="/items">Diskak</a> |
-      <a href="/add_item">Diska berria jarri</a>
+      <a href="/items">Diskak</a>
+      <?php if (isset($_SESSION['is_admin']) && $_SESSION['is_admin'] == 1): ?>
+        | <a href="/add_item">Diska berria jarri</a>
+      <?php endif; ?>
     </nav>
   <?php else: ?>
     <nav>

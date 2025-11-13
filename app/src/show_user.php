@@ -27,5 +27,7 @@ $found = $stmt->fetch();
       <a href="/modify_user?user=<?=urlencode($username)?>">Nire datuak aldatu</a>
     <?php endif; ?>
   <?php endif; ?>
+  <a href="/" class="back-btn">Hasierara bueltatu</a>
+
 </body>
 </html>

@@ -2,37 +2,73 @@
 
 require_once __DIR__.'/db.php';
 
-if (!isset($_SESSION['is_admin']) || $_SESSION['is_admin'] != 1) {
-    http_response_code(403);
-    die('Forbidden: acceso denegado.');
-}
-
-$id = intval($_GET['item'] ?? 0);
-$stmt = $mysqli->prepare("SELECT title,year,artist,genre,description FROM items WHERE id=?");
-$stmt->bind_param('i',$id);
-$stmt->execute();
-$stmt->bind_result($title,$year,$artist,$genre,$description);
-if (!$stmt->fetch()) die('Item ez da aurkitu.');
-$stmt->close();
-
 $errors = [];
-if ($_SERVER['REQUEST_METHOD']==='POST') {
+$fullname = $dni = $phone = $birthdate_input = $email = $username = '';
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!csrf_validate_request()) {
         http_response_code(400);
         $errors[] = 'CSRF token invalid.';
     } else {
-        $title_n = trim($_POST['title'] ?? '');
-        $year_n = intval($_POST['year'] ?? 0);
-        $artist_n = trim($_POST['artist'] ?? '');
-        $genre_n = trim($_POST['genre'] ?? '');
-        $desc_n = trim($_POST['description'] ?? '');
-        if ($title_n==='') $errors[]='Izenburua behar.';
+        $fullname = trim($_POST['fullname'] ?? '');
+        $dni = strtoupper(trim($_POST['dni'] ?? ''));
+        $phone = trim($_POST['phone'] ?? '');
+        $birthdate_input = trim($_POST['birthdate'] ?? '');
+        $email = trim($_POST['email'] ?? '');
+        $username = trim($_POST['username'] ?? '');
+        $password = $_POST['password'] ?? '';
+
+        if (!preg_match('/^[\p{L}\s]+$/u', $fullname)) $errors[] = 'Izen eta abizenak testuzkoa izan behar dira.';
+        if (!preg_match('/^[0-9]{8}-[A-Z]$/', $dni)) $errors[] = 'NAN formatua okerra da.';
+        if (!preg_match('/^[0-9]{9}$/', $phone)) $errors[] = 'Telefono formatu okerra.';
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) $errors[] = 'Email baliogabea.';
+        if (strlen($username) < 3) $errors[] = 'Erabiltzaile izena laburra da.';
+        if (strlen($password) < 6) $errors[] = 'Pasahitza laburra da.';
+
+        $birthdate = null;
+        if ($birthdate_input !== '') {
+            $d = DateTime::createFromFormat('Y-m-d', $birthdate_input);
+            $errors_dt = DateTime::getLastErrors();
+            if ($d && $errors_dt['warning_count'] === 0 && $errors_dt['error_count'] === 0) {
+                $birthdate = $d->format('Y-m-d');
+            } else {
+               $d2 = DateTime::createFromFormat('d-m-Y', $birthdate_input);
+               $errors_dt2 = DateTime::getLastErrors();
+               if ($d2 && $errors_dt2['warning_count'] === 0 && $errors_dt2['error_count'] === 0) {
+                   $birthdate = $d2->format('Y-m-d');
+               } else {
+                   $errors[] = 'Data formatu okerra. Erabili aaaa-mm-dd edo dd-mm-aaaa.';
+               }
+            }
+        } else {
+            $errors[] = 'Jaiotze data beharrezkoa da.';
+        }
+
         if (empty($errors)) {
-            $upd = $mysqli->prepare("UPDATE items SET title=?,year=?,artist=?,genre=?,description=? WHERE id=?");
-            $upd->bind_param('sisssi', $title_n,$year_n,$artist_n,$genre_n,$desc_n,$id);
-            if ($upd->execute()) header('Location: /items');
-            else $errors[]='Error: '.$mysqli->error;
-            $upd->close();
+            $pw_hash = password_hash($password, PASSWORD_DEFAULT);
+            try {
+                $dni_enc = encrypt_field($dni);
+                $phone_enc = encrypt_field($phone);
+                $email_enc = encrypt_field($email);
+            } catch (Exception $e) {
+                $errors[] = 'Zifratze errorea: '.$e->getMessage();
+            }
+
+            if (empty($errors)) {
+                $stmt = $mysqli->prepare("INSERT INTO users (fullname, dni, phone, birthdate, email, username, password, is_admin) VALUES (?,?,?,?,?,?,?, 0)");
+                if (!$stmt) {
+                    $errors[] = 'Prepare errorea: '.$mysqli->error;
+                } else {
+                    $stmt->bind_param('sssssss', $fullname, $dni_enc, $phone_enc, $birthdate, $email_enc, $username, $pw_hash);
+                    if ($stmt->execute()) {
+                        header('Location: /login');
+                        exit;
+                    } else {
+                        $errors[] = 'Erregistro errorea: '.$stmt->error;
+                    }
+                    $stmt->close();
+                }
+            }
         }
     }
 }
@@ -41,20 +77,30 @@ if ($_SERVER['REQUEST_METHOD']==='POST') {
 <html>
 <head>
   <meta charset="utf-8">
-  <title> Diska aldatu</title>
+  <title>Erregistroa</title>
   <script src="/js/validation.js"></script>
+  <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
-  <h2> Diska aldatu</h2>
-  <?php if ($errors) foreach($errors as $e) echo "<p style='color:red'>".htmlspecialchars($e, ENT_QUOTES, 'UTF-8')."</p>"; ?>
-  <form id="item_modify_form" method="post" action="">
+  <h2>Erregistroa</h2>
+
+  <?php if ($errors): ?>
+    <ul style="color:red;">
+      <?php foreach($errors as $e): ?><li><?=htmlspecialchars($e, ENT_QUOTES, 'UTF-8')?></li><?php endforeach; ?>
+    </ul>
+  <?php endif; ?>
+
+  <form id="register_form" method="post" action="">
     <?= csrf_token_input() ?>
-    <label>Izenburua: <input name="title" value="<?=htmlspecialchars($title, ENT_QUOTES, 'UTF-8')?>" required></label><br>
-    <label>Urtea: <input name="year" type="number" value="<?=htmlspecialchars($year, ENT_QUOTES, 'UTF-8')?>" required></label><br>
-    <label>Artista: <input name="artist" value="<?=htmlspecialchars($artist, ENT_QUOTES, 'UTF-8')?>" required></label><br>
-    <label>Generoa: <input name="genre" value="<?=htmlspecialchars($genre, ENT_QUOTES, 'UTF-8')?>"></label><br>
-    <label>Deskripzioa: <textarea name="description"><?=htmlspecialchars($description, ENT_QUOTES, 'UTF-8')?></textarea></label><br>
-    <button id="item_modify_submit" type="submit">Gorde</button>
+    <label>Izen eta abizenak <input name="fullname" required value="<?=htmlspecialchars($fullname, ENT_QUOTES, 'UTF-8')?>"></label><br>
+    <label>NAN (11111111-Z): <input name="dni" required value="<?=htmlspecialchars($dni, ENT_QUOTES, 'UTF-8')?>"></label><br>
+    <label>Telefonoa: <input name="phone" required value="<?=htmlspecialchars($phone, ENT_QUOTES, 'UTF-8')?>"></label><br>
+    <label>Jaiotze data (aaaa-mm-dd o dd-mm-aaaa): <input name="birthdate" required placeholder="aaaa-mm-dd" value="<?=htmlspecialchars($birthdate_input, ENT_QUOTES, 'UTF-8')?>"></label><br>
+    <label>Email: <input name="email" required value="<?=htmlspecialchars($email, ENT_QUOTES, 'UTF-8')?>"></label><br>
+    <label>Erabiltzailea: <input name="username" required value="<?=htmlspecialchars($username, ENT_QUOTES, 'UTF-8')?>"></label><br>
+    <label>Password: <input type="password" name="password" required></label><br>
+    <button id="register_submit" type="submit">Erregistratu</button>
   </form>
+  <a href="/" class="back-btn">Hasierara bueltatu</a>
 </body>
 </html>

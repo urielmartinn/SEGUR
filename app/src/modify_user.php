@@ -1,37 +1,44 @@
 <?php
-// Erabiltzailea editatu: localhost:81/modify_user?user={x}
-// id formularioa: user_modify_form
-// id botoia: user_modify_submit
-session_start();
+
 require_once __DIR__.'/db.php';
 
 if (!isset($_GET['user'])) {
     http_response_code(400);
-    die('Usuario ez espezifikatua.');
+    die('Erabiltzailea zehaztu behar da.');
 }
-
 $user = $_GET['user'];
-
-// Bakarrik aldatze uzten du identifikatuta bagaude eta koinziditzen badu
 if (!isset($_SESSION['username']) || $_SESSION['username'] !== $user) {
     http_response_code(403);
-    die('Ez dago autorizatuta. Identifikatuta egon behar da eta erabiltzailea izan.');
+    die('Ez dago autorizatuta. Identifikatuta egon behar da eta erabiltzailea bera izan.');
 }
 
 $errors = [];
-
-// erabiltzailearen datuak lortu
+// Zifratu erabiltzaile datuak
 $stmt = $mysqli->prepare("SELECT fullname,dni,phone,birthdate,email FROM users WHERE username=?");
 if (!$stmt) {
-    die('Kontsultan errorea: '.$mysqli->error);
+    die('Kontsulta errorea: '.$mysqli->error);
 }
 $stmt->bind_param('s', $user);
 $stmt->execute();
-$stmt->bind_result($fullname, $dni, $phone, $birthdate, $email);
+$stmt->bind_result($fullname, $dni_enc, $phone_enc, $birthdate, $email_enc);
 if (!$stmt->fetch()) {
     die('Erabiltzailea ez da aurkitu.');
 }
 $stmt->close();
+
+
+function maybe_decrypt($val) {
+    if ($val === null) return null;
+    $decoded = base64_decode($val, true);
+    if ($decoded === false) return $val; 
+    $plain = decrypt_field($val);
+    return $plain === null ? $val : $plain;
+}
+
+$fullname = $fullname;
+$dni = maybe_decrypt($dni_enc);
+$phone = maybe_decrypt($phone_enc);
+$email = maybe_decrypt($email_enc);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $fullname_new = trim($_POST['fullname'] ?? '');
@@ -41,13 +48,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email_new = trim($_POST['email'] ?? '');
 
     // Oinarrizko eremuak berriz baliozkotzea
-    // CORRECCIÓN: usar \p{L} en lugar de escapes \u
+
     if (!preg_match('/^[\p{L}\s]+$/u', $fullname_new)) $errors[] = 'Izen okerra.';
     if (!preg_match('/^[0-9]{8}-[A-Z]$/', $dni_new) || !check_nif($dni_new)) $errors[] = 'NAN okerra.';
     if (!preg_match('/^[0-9]{9}$/', $phone_new)) $errors[] = 'Teléfono okerra.';
     if (!filter_var($email_new, FILTER_VALIDATE_EMAIL)) $errors[] = 'Email okerra.';
 
-    // Data: YYYYY-MM-DD baliozkotu eta normalizatu DateTime erabiliz (YYYYY-MM-DD eta DD-MM-YYYY onartzen ditu)
+    // Data: YYYYY-MM-DD baliozkotu eta normalizatu
     $birthdate_new = null;
     if ($birthdate_input !== '') {
         $d = DateTime::createFromFormat('Y-m-d', $birthdate_input);

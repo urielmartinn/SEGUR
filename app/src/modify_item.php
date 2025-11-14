@@ -39,11 +39,15 @@ if ($_SERVER['REQUEST_METHOD']==='POST') {
 ?>
 <!DOCTYPE html>
 <html>
-<head><meta charset="utf-8"><title> Diska aldatu</title><script src="/js/validation.js"></script></head>
+<head>
+  <meta charset="utf-8">
+  <title> Diska aldatu</title>
+  <script src="/js/validation.js"></script>
+</head>
 <body>
   <h2> Diska aldatu</h2>
   <?php if ($errors) foreach($errors as $e) echo "<p style='color:red'>".htmlspecialchars($e, ENT_QUOTES, 'UTF-8')."</p>"; ?>
-  <form id="item_modify_form" method="post" action="" onsubmit="return validateItemForm();">
+  <form id="item_modify_form" method="post" action="">
     <?= csrf_token_input() ?>
     <label>Izenburua: <input name="title" value="<?=htmlspecialchars($title, ENT_QUOTES, 'UTF-8')?>" required></label><br>
     <label>Urtea: <input name="year" type="number" value="<?=htmlspecialchars($year, ENT_QUOTES, 'UTF-8')?>" required></label><br>
@@ -53,4 +57,4 @@ if ($_SERVER['REQUEST_METHOD']==='POST') {
     <button id="item_modify_submit" type="submit">Gorde</button>
   </form>
 </body>
-</html> 
+</html>

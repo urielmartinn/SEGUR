@@ -10,6 +10,7 @@ services:
       - db
     environment:
       - PHP_DISPLAY_ERRORS=1
+      - APP_ENC_KEY:"q16N1/nKYKAX+vuVagU9gM6j5Jk9qdhVCLxYfBBsSGw="
   db:
     image: mariadb:10.11
     restart: always

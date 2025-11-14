@@ -1,6 +1,7 @@
 <?php
 
 require_once __DIR__ . '/db.php';
+error_log('DEBUG_CSP_FORZADA');
 ?>
 <!DOCTYPE html>
 <html>

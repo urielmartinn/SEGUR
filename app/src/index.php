@@ -1,6 +1,6 @@
 <?php
 
-session_start();
+require_once __DIR__ . '/db.php';
 ?>
 <!DOCTYPE html>
 <html>
@@ -28,4 +28,4 @@ session_start();
     </nav>
   <?php endif; ?>
 </body>
-</html>
+</html> 

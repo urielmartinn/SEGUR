@@ -7,6 +7,37 @@ $DB_PASS = getenv('MYSQL_PASSWORD') ? getenv('MYSQL_PASSWORD') : 'apppass';
 $DB_NAME = getenv('MYSQL_DATABASE') ? getenv('MYSQL_DATABASE') : 'appdb';
 $USE_SSL = getenv('DB_USE_SSL') === '1';
 
+
+function set_security_headers() {
+
+    $csp = [
+        "default-src 'self'",
+        "script-src 'self' 'unsafe-inline'",
+        "style-src 'self' 'unsafe-inline'",
+        "img-src 'self' data:",
+        "font-src 'self' data:",
+        "connect-src 'self'",
+        "object-src 'none'",
+        "base-uri 'self'",
+        "form-action 'self'",
+        "frame-ancestors 'self'"
+    ];
+    header('Content-Security-Policy: ' . implode('; ', $csp));
+    header('X-Frame-Options: SAMEORIGIN');
+    header('X-Content-Type-Options: nosniff');
+    header('Referrer-Policy: strict-origin-when-cross-origin');
+    header("Permissions-Policy: geolocation=(), camera=(), microphone=()");
+
+    $secure = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on') || getenv('FORCE_HTTPS') === '1';
+    if ($secure) {
+
+        header('Strict-Transport-Security: max-age=31536000; includeSubDomains; preload');
+    }
+
+    header('Server: SecureApp');
+    header_remove('X-Powered-By');
+}
+
 // mysqli hasieratu
 $mysqli = mysqli_init();
 if ($USE_SSL) {
@@ -27,7 +58,6 @@ if (!$mysqli->real_connect($DB_HOST, $DB_USER, $DB_PASS, $DB_NAME, ini_get("mysq
 $mysqli->set_charset("utf8mb4");
 
 // Saioen hasieratze segurua
-// HTTPS aktibatuta badago, cookieak secure izango dira
 if (php_sapi_name() !== 'cli') {
     $secure = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on') || getenv('FORCE_HTTPS') === '1';
 
@@ -43,7 +73,10 @@ if (php_sapi_name() !== 'cli') {
         ]);
         session_start();
     } else {
+
     }
+
+    set_security_headers();
 }
 
 // libsodium instalatuta egon behar du aplikazioan, honek seguruago bihurtzen du guztia

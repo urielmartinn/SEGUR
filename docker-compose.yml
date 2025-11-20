@@ -8,8 +8,11 @@ services:
       - ./app/src:/var/www/html
     depends_on:
       - db
+    env_file:
+      - .env
     environment:
-      - PHP_DISPLAY_ERRORS=1
+      PHP_DISPLAY_ERRORS: "1"
+      APP_ENC_KEY: ${APP_ENC_KEY}
   db:
     image: mariadb:10.11
     restart: always

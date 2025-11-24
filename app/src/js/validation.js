@@ -1,5 +1,4 @@
 function validateRegisterForm(){
-
   const form = document.getElementById('register_form');
   const fullname = form.elements['fullname'].value.trim();
   const dni = form.elements['dni'].value.trim().toUpperCase();
@@ -13,6 +12,7 @@ function validateRegisterForm(){
   if (!/^[^@]+@[^@]+\.[^@]+$/.test(email)){ alert('Email txarto'); return false; }
   return true;
 }
+
 function validateItemForm(){
   const form = document.getElementById('item_add_form') || document.getElementById('item_modify_form');
   if (!form) return true;
@@ -24,6 +24,7 @@ function validateItemForm(){
   if (artist.length===0){ alert('Abezlea behar da'); return false; }
   return true;
 }
+
 function checkNif(dni){
   const map = "TRWAGMYFPDXBNJZSQVHLCKE";
   const m = dni.match(/^([0-9]{8})-([A-Z])$/);
@@ -32,3 +33,21 @@ function checkNif(dni){
   const letter = m[2];
   return map.charAt(num % 23) === letter;
 }
+
+//handlers inline erabili gabe JSn (CSP friendly)
+document.addEventListener('DOMContentLoaded', () => {
+  const regForm = document.getElementById('register_form');
+  if (regForm) regForm.addEventListener('submit', (e) => {
+    if (!validateRegisterForm()) e.preventDefault();
+  });
+
+  const addForm = document.getElementById('item_add_form');
+  if (addForm) addForm.addEventListener('submit', (e) => {
+    if (!validateItemForm()) e.preventDefault();
+  });
+
+  const modForm = document.getElementById('item_modify_form');
+  if (modForm) modForm.addEventListener('submit', (e) => {
+    if (!validateItemForm()) e.preventDefault();
+  });
+});
